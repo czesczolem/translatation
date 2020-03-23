@@ -5,3 +5,4 @@ rasa/__pycache__/
 *.csv
 *.log
 rasa/models/*
+__pycache__/
