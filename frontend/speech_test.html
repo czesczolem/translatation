@@ -41,7 +41,7 @@
     recognition.interimResults = true;
     recognition.maxAlternatives = 10;
     recognition.continuous = true;
-    recognition.lang = 'en-US';
+    recognition.lang = 'de-DE';
     recognition.onresult = (event) => {
       let interimTranscript = '';
       for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
@@ -62,6 +62,9 @@
 
     }
     recognition.start();
+    recognition.onend = (event) => {
+        recognition.start();
+    };
   </script>
 
 
