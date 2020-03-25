@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, make_response, jsonify, render_template
 from flask_cors import CORS
 from google.cloud import translate_v2 as translate
 import six
@@ -8,6 +8,7 @@ from elasticsearch import Elasticsearch
 from utils import Elasticsearcher
 from datetime import datetime
 import time
+import collections
 
 
 
@@ -23,11 +24,12 @@ index = 'translations'
 es = Elasticsearch()
 esr = Elasticsearcher(es, index)
 
-intents_tracker = []
+conv_tracker = collections.deque([None] * 4, maxlen=4)
+
 
 @app.route('/')
 def index():
-    return 'Hello World!'
+    return render_template('speech_test.html')
 
 def get_intent(text):
     print(f"Getting intent from: {text}")
@@ -57,6 +59,7 @@ def intent_handler(text_input, intent):
         return ""
     else:
         result_text = "I dont know this intent..."
+        result_text = translate(text_input, language="en")
     return result_text
 
 def get_input_text_from_request(request):
@@ -67,17 +70,18 @@ def get_input_text_from_request(request):
     return text_input
 
 def save_translation(text_input, intent, response_text):
-    conversation_data = {
+    conversation_unit = {
             "date": datetime.today(),
             "text_query": text_input,
-            "intent": intent,
+            "intent": intent if intent else "default",
             "response": response_text,
-            "intents_tracker": intents_tracker
         }
-    intents_tracker.append(intent)
+
+    conv_tracker.append(conversation_unit)
     conv_id = int(time.time())
-    print(f"push data to elastic: {conversation_data}")
-    res = es.index(index='translations', id=conv_id, body=conversation_data)
+
+    print(f"push data to elastic: {conversation_unit}")
+    res = es.index(index='translations', id=conv_id, body=conversation_unit)
 
 def results():
     text_input = get_input_text_from_request(request)
