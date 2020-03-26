@@ -1,12 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Speech Recording</title>
-</head>
-<body>
+{% extends "bootstrap/base.html" %}
+
+
+{% block title %}This is an example page{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block body %}
+  <input type="text" id="inputTextId" value="Hello" onchange="postData('http://localhost:3000/parse_data', { answer: this.value})">
+{% endblock %}
+
+{% block scripts %}
   <script>
 
     // Example POST method implementation:
@@ -29,13 +36,40 @@
       return await response.json(); // parses JSON response into native JavaScript objects
     }
 
-    postData('http://localhost:3000/webhook', { answer: 42 })
-      .then((data) => {
-        console.log(data); // JSON data parsed by `response.json()` call
-      });
+
 
         </script>
+  <script>
 
+    window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+    let finalTranscript = '';
+    let recognition = new window.SpeechRecognition();
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 10;
+    recognition.continuous = true;
+    recognition.lang = 'de-DE';
+    recognition.onresult = (event) => {
+      let interimTranscript = '';
+      for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
+        let transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+      document.querySelector('body').innerHTML = finalTranscript + '<i style="color:#ddd;">' + interimTranscript + '</>';
+      if (finalTranscript) {
+            postData('http://localhost:3000/webhook', { answer: finalTranscript}).then((data) => {
+            document.querySelector('body').innerHTML = data.text; // JSON data parsed by `response.json()` call
+            finalTranscript = "";
+      });
+}
 
-</body>
-</html>
+    }
+    recognition.start();
+    recognition.onend = (event) => {
+        recognition.start();
+    };
+  </script>
+{% endblock %}

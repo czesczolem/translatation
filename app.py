@@ -99,6 +99,13 @@ def webhook():
     res.headers['Access-Control-Allow-Origin'] = '*'
     return res
 
+@app.route('/parse_data', methods=['GET', 'POST'])
+def parse_data():
+    if request.method == "POST":
+        data = request.get_json()
+        print(data)
+        return make_response(jsonify({"status": "ok"}))
+
 # run the app
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=3000)

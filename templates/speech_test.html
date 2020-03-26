@@ -7,7 +7,7 @@
     <title>Speech Recording</title>
 </head>
 <body>
-
+<input type="text" id="inputTextId" value="Hello" onchange="postData('http://localhost:3000/parse_data', { answer: this.value})">
   <script>
 
     // Example POST method implementation:
