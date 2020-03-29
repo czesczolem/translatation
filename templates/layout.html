@@ -56,7 +56,7 @@
           <!--</div>-->
         <!--</div>-->
       <!--</div>-->
-    <!--</main>-->
+    </main>
 
 
     <!-- Optional JavaScript -->
@@ -111,7 +111,7 @@
           document.querySelector('#main-input').innerHTML = '<h1>' + finalTranscript + '<i style="color:#ddd;">' + interimTranscript + '</></h1>';
           if (finalTranscript) {
                 postData('http://localhost:3000/webhook', { answer: finalTranscript}).then((data) => {
-                document.querySelector('#main-input').innerHTML = '<h1>' + data.text + '</h1>'; // JSON data parsed by `response.json()` call
+                document.querySelector('#bot-output-1').innerHTML = '<h1>' + data.text + '</h1>'; // JSON data parsed by `response.json()` call
                 finalTranscript = "";
           });
         }
@@ -121,6 +121,20 @@
         recognition.onend = (event) => {
             recognition.start();
         };
+    </script>
+    <script>
+
+        function show_hide(id2hide){
+           console.log("Hello world!");
+           var x = document.getElementById(id2hide);
+           if (x.style.display === "none") {
+                x.style.display = "block";
+              } else {
+                x.style.display = "none";
+              }
+
+        }
+
     </script>
 </body>
 </html>

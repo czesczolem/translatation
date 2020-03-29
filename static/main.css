@@ -85,12 +85,17 @@ a.article-title:hover {
     margin-top: 20px;
 }
 
-.translated-text {
+.main-text {
     text-align: center;
+    vertical-align: middle;
 }
 
 #main-input {
     margin-top: 20px;
     vertical-align: middle;
     text-align: center;
+}
+
+#paste-input {
+    display: none;
 }

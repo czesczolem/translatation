@@ -3,14 +3,20 @@
     <div class="container" id="main-input">
         <h1>Hello, I can translate!</h1>
     </div>
-    <div class="container response-box">
+    <button id='btn_1' type='button' class="btn btn-primary btn-lg btn-block" onclick='show_hide("paste-input")'/>Paste your text</button>
+    <div class="container response-box" id="paste-input">
         <div style="margin-top:20px;">
-            <p class="translated-text">Center aligned text on all viewport sizes.</p>
+            <input type="text" id="inputTextId" value="Hello" onchange="postData('http://localhost:3000/parse_data', { answer: this.value})">
+            <!--<p class="main-text">-->
+                <!--<h1>Paste your text.</h1>-->
+            <!--</p>-->
         </div>
     </div>
-    <div class="container response-box">
+    <div class="container response-box" id="bot-output-1">
         <div style="margin-top:20px;">
-            <p class="translated-text">Center aligned text on all viewport sizes.</p>
+            <p class="main-text">
+                <h1>Translation</h1>
+            </p>
         </div>
     </div>
 {% endblock content %}
