@@ -27,9 +27,7 @@ esr = Elasticsearcher(es, index)
 conv_tracker = collections.deque([None] * 4, maxlen=4)
 
 
-@app.route('/')
-def index():
-    return render_template('speech_test.html')
+
 
 def get_intent(text):
     print(f"Getting intent from: {text}")
@@ -91,6 +89,9 @@ def results():
     response = {"text": response_text}
     return response
 
+@app.route('/')
+def index():
+    return render_template('home.html')
 
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
