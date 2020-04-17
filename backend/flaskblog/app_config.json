@@ -1,0 +1,6 @@
+{
+  "SECRET_KEY": "AC3E1F3ABE1559AE77433749642AA",
+  "SQLALCHEMY_DATABASE_URI": "mysql://mainer:skate123@localhost:3306/transly",
+  "EMAIL_USER": "chonarandke@gmail.com",
+  "EMAIL_PASS": "Chonarandke123"
+}
