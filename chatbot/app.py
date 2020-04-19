@@ -21,8 +21,8 @@ app = Flask(__name__)
 CORS(app)
 
 index = 'translations'
-es = Elasticsearch()
-esr = Elasticsearcher(es, index)
+# es = Elasticsearch()
+# esr = Elasticsearcher(es, index)
 
 conv_tracker = collections.deque([None] * 4, maxlen=4)
 
@@ -34,10 +34,11 @@ def get_intent(text):
     data = {
         "text": text
     }
-    r = requests.post(rasa_parser_url, data=json.dumps(data), headers=headers)
-    rasa_response = json.loads(r.content)
-    print(rasa_response)
-    detected_intent = rasa_response['intent']['name']
+    # r = requests.post(rasa_parser_url, data=json.dumps(data), headers=headers)
+    # rasa_response = json.loads(r.content)
+    # print(rasa_response)
+    # detected_intent = rasa_response['intent']['name']
+    detected_intent = 'translate'
     return detected_intent
 
 def translate(text, language="de"):
@@ -67,25 +68,25 @@ def get_input_text_from_request(request):
         text_input = text_input.decode('utf-8')
     return text_input
 
-def save_translation(text_input, intent, response_text):
-    conversation_unit = {
-            "date": datetime.today(),
-            "text_query": text_input,
-            "intent": intent if intent else "default",
-            "response": response_text,
-        }
-
-    conv_tracker.append(conversation_unit)
-    conv_id = int(time.time())
-
-    print(f"push data to elastic: {conversation_unit}")
-    res = es.index(index='translations', id=conv_id, body=conversation_unit)
+# def save_translation(text_input, intent, response_text):
+#     conversation_unit = {
+#             "date": datetime.today(),
+#             "text_query": text_input,
+#             "intent": intent if intent else "default",
+#             "response": response_text,
+#         }
+#
+#     conv_tracker.append(conversation_unit)
+#     conv_id = int(time.time())
+#
+#     print(f"push data to elastic: {conversation_unit}")
+#     res = es.index(index='translations', id=conv_id, body=conversation_unit)
 
 def results():
     text_input = get_input_text_from_request(request)
     intent = get_intent(text_input)
     response_text = intent_handler(text_input, intent)
-    save_translation(text_input, intent, response_text)
+    # save_translation(text_input, intent, response_text)
     response = {"text": response_text}
     return response
 
