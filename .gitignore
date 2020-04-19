@@ -6,3 +6,4 @@ rasa/__pycache__/
 *.log
 rasa/models/*
 __pycache__/
+backend/flaskblog/app_config.json
