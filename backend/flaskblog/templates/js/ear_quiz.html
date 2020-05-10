@@ -1,4 +1,41 @@
+
 <script>
+
+    // Example POST method implementation:
+    async function postData(url = '', data = {}) {
+      // Default options are marked with *
+      const response = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json',
+          'cache-control': 'no-cache'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *client
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+      });
+      return await response.json(); // parses JSON response into native JavaScript objects
+    }
+
+
+
+</script>
+
+<script>
+
+    postData('http://127.0.0.1:5000/quiz_check_answer', {question: 1, answer: 1}).then((init_data) => {
+        let question = init_data.next_question;
+        document.querySelector('#bot-output-1').innerHTML = '<h1>' + question + '</h1>';
+        console.log(init_data)
+    });
+
+</script>
+<script>
+
 
     window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
     let finalTranscript = '';
@@ -6,7 +43,7 @@
     recognition.interimResults = true;
     recognition.maxAlternatives = 10;
     recognition.continuous = true;
-    recognition.lang = 'pl-PL';
+    recognition.lang = 'en-EN';
     recognition.onresult = (event) => {
       let interimTranscript = '';
       for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
@@ -19,12 +56,13 @@
       }
       document.querySelector('#main-input').innerHTML = '<h1>' + finalTranscript + '<i style="color:#ddd;">' + interimTranscript + '</></h1>';
       if (finalTranscript) {
-            postData('http://127.0.0.1:5000/translate', { answer: finalTranscript}).then((data) => {
-            if (data.answ_correct == 1) {
+            postData('http://127.0.0.1:5000/quiz_check_answer', { question: document.querySelector('#bot-output-1').innerHTML, answer: finalTranscript}).then((data) => {
+            console.log(data);
+            if (data.answer_correct == 1) {
                 document.querySelector('#bot-output-1').innerHTML = '<h1>' + data.next_question + '</h1>';
             }
             else {
-                document.querySelector('#bot-output-1').innerHTML = '<h1>WRONG!</h1>';
+                document.querySelector('#main-input').innerHTML = '<h1>WRONG!</h1>';
             }
 
             finalTranscript = "";

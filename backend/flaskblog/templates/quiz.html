@@ -2,7 +2,7 @@
 {% block content %}
 
     <div class="container" id="main-input">
-        <h1>Hello, I can translate!</h1>
+        <h1>...</h1>
     </div>
 
     <div class="container response-box" id="bot-output-1">
@@ -12,26 +12,28 @@
             </p>
         </div>
     </div>
-<script>
-    const main_input = document.querySelector('#main-input')
-    const xhr = new XMLHttpRequest()
-    const method = 'GET' // "POST"
-    const url = "/sample_data"
-    const responseType = "json"
+<!--<script>-->
+    <!--const main_input = document.querySelector('#main-input')-->
+    <!--const xhr = new XMLHttpRequest()-->
+    <!--const method = 'GET' // "POST"-->
+    <!--const url = "/sample_data"-->
+    <!--const responseType = "json"-->
 
 
-    xhr.responseType = responseType
-    xhr.open(method, url)
-    xhr.onload = function() {
-        const serverResponse = xhr.response
-        listedItems = serverResponse.response
-        var item = listedItems.pop()
-        main_input.innerHTML = item[1]   ;
-        console.log(listedItems)
-    }
-    xhr.send()
+    <!--xhr.responseType = responseType-->
+    <!--xhr.open(method, url)-->
+    <!--xhr.onload = function() {-->
+        <!--const serverResponse = xhr.response-->
+        <!--listedItems = serverResponse.response-->
+        <!--var item = listedItems.pop()-->
+        <!--main_input.innerHTML = item[1]   ;-->
+        <!--console.log(listedItems)-->
+    <!--}-->
+    <!--xhr.send()-->
 
 
 
-</script>
+<!--</script>-->
+{% include 'js/ear_quiz.html' %}
+
 {% endblock content %}
