@@ -16,7 +16,7 @@ class Translator:
         try:
             self.current_question = self.sample_data.pop()
         except:
-            self.current_question = {"en": "list is empty", "pl": "lista jest pusta"}
+            self.current_question = {"en": "Quiz finished", "pl": "Quiz ukończony"}
 
     def handle_response(self, question, answer):
         print(f"RESP HANDLING current: {self.current_question}, question: {question}, answer: {answer}")
