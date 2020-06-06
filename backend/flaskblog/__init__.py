@@ -5,6 +5,8 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flaskblog.config import Config
 from flaskblog.translator.translator import Translator
+from flaskblog.translator.brain import Brain
+
 
 
 db = SQLAlchemy()
@@ -24,6 +26,7 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     mail.init_app(app)
     app.translator = Translator()
+    app.brain = Brain()
 
     from flaskblog.users.routes import users
     from flaskblog.translator.routes import translator

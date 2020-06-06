@@ -47,3 +47,18 @@ def quiz_check_answer():
     return res
 
 
+@translator.route("/brain")
+def brain():
+    return render_template('brain.html', title='Brain')
+
+@translator.route("/brain_test", methods=['GET', 'POST'])
+def brain_test():
+    data = request.json
+    input_text = current_app.translator.get_input_text_from_request(data)
+    deps_graph = current_app.brain.process_deps(input_text)
+    response = {"text": str(deps_graph)}
+    res = make_response(jsonify(response))
+    res.headers['Access-Control-Allow-Origin'] = '*'
+
+    return res
+
