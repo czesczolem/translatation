@@ -19,7 +19,7 @@
       }
       document.querySelector('#main-input').innerHTML = '<h1>' + finalTranscript + '<i style="color:#ddd;">' + interimTranscript + '</></h1>';
       if (finalTranscript) {
-            postData('https://translatation.eu/translate', { answer: finalTranscript}).then((data) => {
+            postData('http://127.0.0.1:5000/translate', { answer: finalTranscript}).then((data) => {
             document.querySelector('#bot-output-1').innerHTML = '<h1>' + data.text + '</h1>'; // JSON data parsed by `response.json()` call
             finalTranscript = "";
       });

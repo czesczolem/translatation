@@ -2,10 +2,10 @@ from flask import (make_response, current_app, Blueprint, jsonify, request, rend
 from flask_login import current_user
 from flaskblog import db
 
-translator = Blueprint('translator', __name__)
+language_apps = Blueprint('language_apps', __name__)
 
 
-@translator.route("/translate", methods=['GET', 'POST'])
+@language_apps.route("/translate", methods=['GET', 'POST'])
 def translate():
     data = request.json
     input_text = current_app.translator.get_input_text_from_request(data)
@@ -16,14 +16,17 @@ def translate():
 
     return res
 
-@translator.route("/quiz")
+
+####
+
+@language_apps.route("/quiz")
 def quiz():
     return render_template('quiz.html', title='Quiz')
 
-@translator.route("/quiz_check_answer", methods=['GET', 'POST'])
+@language_apps.route("/quiz_check_answer", methods=['GET', 'POST'])
 def quiz_check_answer():
     data = request.json
-    question, answer = current_app.translator.handle_quiz_request(data)
+    question, answer = current_app.quiz.handle_quiz_request(data)
     print(f"request data: {data}. question: {question}, answer: {answer}")
 
     if question == 1:
@@ -46,12 +49,13 @@ def quiz_check_answer():
     res.headers['Access-Control-Allow-Origin'] = '*'
     return res
 
+###
 
-@translator.route("/brain")
+@language_apps.route("/brain")
 def brain():
     return render_template('brain.html', title='Brain')
 
-@translator.route("/brain_test", methods=['GET', 'POST'])
+@language_apps.route("/brain_test", methods=['GET', 'POST'])
 def brain_test():
     data = request.json
     input_text = current_app.translator.get_input_text_from_request(data)
