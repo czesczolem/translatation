@@ -1,6 +1,7 @@
 from flask import (make_response, current_app, Blueprint, jsonify, request, render_template)
 from flask_login import current_user
 from flaskblog import db
+from .quiz import format_question
 
 language_apps = Blueprint('language_apps', __name__)
 
@@ -30,16 +31,16 @@ def quiz_check_answer():
     print(f"request data: {data}. question: {question}, answer: {answer}")
 
     if question == 1:
-        current_app.translator.start_quiz()
-        next_question_if_correct = current_app.translator.current_question
+        current_app.quiz.start_quiz()
+        next_question_if_correct = current_app.quiz.current_question
     else:
-        next_question_if_correct = current_app.translator.handle_response(question, answer)
-        print(next_question_if_correct)
+        next_question_if_correct = current_app.quiz.handle_response(question, answer)
+    print(next_question_if_correct)
 
 
     response = {
         "answer_correct": 1 if next_question_if_correct else 0,
-        "next_question": next_question_if_correct['pl'] if next_question_if_correct else 0
+        "next_question": format_question(next_question_if_correct['question']) if next_question_if_correct else 0
 
     }
     print(f"response: {response}")

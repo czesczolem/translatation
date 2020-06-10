@@ -27,7 +27,7 @@ def create_app(config_class=Config):
     mail.init_app(app)
     app.translator = Translator()
     app.quiz = Quiz()
-    app.brain = Brain()
+    # app.brain = Brain()
 
     from flaskblog.users.routes import users
     from flaskblog.language_apps.routes import language_apps

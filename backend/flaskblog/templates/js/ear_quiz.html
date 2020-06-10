@@ -29,7 +29,7 @@
 
     postData('http://127.0.0.1:5000/quiz_check_answer', {question: 1, answer: 1}).then((init_data) => {
         let question = init_data.next_question;
-        document.querySelector('#bot-output-1').innerHTML = '<h1>' + question + '</h1>';
+        document.querySelector('#question-space').innerHTML = question;
         console.log(init_data)
     });
 
@@ -43,7 +43,7 @@
     recognition.interimResults = true;
     recognition.maxAlternatives = 10;
     recognition.continuous = true;
-    recognition.lang = 'en-EN';
+    recognition.lang = 'de-DE';
     recognition.onresult = (event) => {
       let interimTranscript = '';
       for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
@@ -59,7 +59,7 @@
             postData('http://127.0.0.1:5000/quiz_check_answer', { question: document.querySelector('#bot-output-1').innerHTML, answer: finalTranscript}).then((data) => {
             console.log(data);
             if (data.answer_correct == 1) {
-                document.querySelector('#bot-output-1').innerHTML = '<h1>' + data.next_question + '</h1>';
+                document.querySelector('#question-space').innerHTML = data.next_question;
             }
             else {
                 document.querySelector('#main-input').innerHTML = '<h1>WRONG!</h1>';
