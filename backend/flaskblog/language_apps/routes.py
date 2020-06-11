@@ -23,7 +23,7 @@ def translate():
 @language_apps.route("/quiz")
 def quiz():
     data = {
-        "language": "pl-PL",
+        "language": "de-DE",
         "API_URL": current_app.config['API_URL']
     }
     return render_template('quiz.html', title='Quiz', data=data)
@@ -35,7 +35,7 @@ def quiz_check_answer():
     print(f"request data: {data}. question: {question}, answer: {answer}")
 
     if question == 1:
-        current_app.quiz.start_quiz()
+        # current_app.quiz.start_quiz()
         next_question_if_correct = current_app.quiz.current_question
     else:
         next_question_if_correct = current_app.quiz.handle_response(question, answer)

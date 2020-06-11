@@ -7,6 +7,8 @@ from flaskblog.config import Config
 from flaskblog.language_apps.translator import Translator
 from flaskblog.language_apps.brain import Brain
 from flaskblog.language_apps.quiz import Quiz
+from flaskblog.language_apps.DataLoader import DataLoader
+
 
 
 db = SQLAlchemy()
@@ -26,7 +28,9 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     mail.init_app(app)
     app.translator = Translator()
-    app.quiz = Quiz()
+    app.dataloader = DataLoader(app.config['X_MYSQL_HOST'], app.config['X_MYSQL_USER'], app.config['X_MYSQL_PASS'], 'transly')
+    app.dataloader.get_data("SELECT p1, p2, p3 FROM starke_verbe;")
+    app.quiz = Quiz(app.dataloader)
     # app.brain = Brain()
 
     from flaskblog.users.routes import users

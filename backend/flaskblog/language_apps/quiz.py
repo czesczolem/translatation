@@ -3,15 +3,16 @@ import pandas as pd
 import random
 import json
 
-def gab_sample_data(sample_data):
+def gab_data(data):
     prep_data = []
-    for s in sample_data:
-        answer = str(random.randint(1,3))
-        s_keys = list(s.keys())
-        s_keys.remove(answer)
+    for s in data:
+        s = list(s)
+        random_num = random.randint(0,2)
+        answer = s[random_num]
+        s.remove(answer)
         prep_data.append({
-            "question": [s[s_keys[0]], s[s_keys[1]], "_ " * len(s[answer])],
-            "answer":s[answer]
+            "question": [s[0], s[1], "_ " * len(answer)],
+            "answer":answer
         })
     return prep_data
 
@@ -28,10 +29,11 @@ def format_question(question):
 
 class Quiz(BaseParser):
 
-    def start_quiz(self):
+    def __init__(self, dataloader):
+        BaseParser.__init__(self)
         self.question_counter = 0
 #         self.sample_data = [{"en": "good", "pl": "dobrze"}, {"en": "bad", "pl": "źle"}, {"en": "better", "pl": "lepiej"}]
-        self.sample_data = gab_sample_data(json.loads(pd.read_csv('/home/mainer/Desktop/projects/transly/backend/flaskblog/language_apps/test_verbs.csv').to_json(orient='records')))
+        self.sample_data = gab_data(dataloader.data)
         self.current_question = self.sample_data.pop()
 
     def prep_question(self):
