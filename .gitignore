@@ -3,6 +3,7 @@ rasa/__pycache__/
 *.pdf
 *.ipynb
 *.csv
+snipetes
 *.log
 rasa/models/*
 __pycache__/
