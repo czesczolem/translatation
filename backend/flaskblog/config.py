@@ -8,6 +8,7 @@ class Config:
     SECRET_KEY = conf.get('SECRET_KEY')
     SECURITY_PASSWORD_SALT = conf.get('SECURITY_PASSWORD_SALT')
     SQLALCHEMY_DATABASE_URI = conf.get('SQLALCHEMY_DATABASE_URI')
+    API_URL = conf.get('API_URL')
     MAIL_SERVER = 'smtp.googlemail.com'
     DEBUG = False
     BCRYPT_LOG_ROUNDS = 13

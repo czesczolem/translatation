@@ -22,7 +22,11 @@ def translate():
 
 @language_apps.route("/quiz")
 def quiz():
-    return render_template('quiz.html', title='Quiz')
+    data = {
+        "language": "pl-PL",
+        "API_URL": current_app.config['API_URL']
+    }
+    return render_template('quiz.html', title='Quiz', data=data)
 
 @language_apps.route("/quiz_check_answer", methods=['GET', 'POST'])
 def quiz_check_answer():
@@ -54,7 +58,11 @@ def quiz_check_answer():
 
 @language_apps.route("/brain")
 def brain():
-    return render_template('brain.html', title='Brain')
+    data = {
+        "language": "pl-PL",
+        "API_URL": current_app.config['API_URL']
+    }
+    return render_template('brain.html', title='Brain', data=data)
 
 @language_apps.route("/brain_test", methods=['GET', 'POST'])
 def brain_test():

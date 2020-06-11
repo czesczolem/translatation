@@ -18,28 +18,82 @@
             </p>
         </div>
     </div>
-<!--<script>-->
-    <!--const main_input = document.querySelector('#main-input')-->
-    <!--const xhr = new XMLHttpRequest()-->
-    <!--const method = 'GET' // "POST"-->
-    <!--const url = "/sample_data"-->
-    <!--const responseType = "json"-->
+
+<script>
+
+    // Example POST method implementation:
+    async function postData(url = '', data = {}) {
+      // Default options are marked with *
+      const response = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json',
+          'cache-control': 'no-cache'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *client
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+      });
+      return await response.json(); // parses JSON response into native JavaScript objects
+    }
 
 
-    <!--xhr.responseType = responseType-->
-    <!--xhr.open(method, url)-->
-    <!--xhr.onload = function() {-->
-        <!--const serverResponse = xhr.response-->
-        <!--listedItems = serverResponse.response-->
-        <!--var item = listedItems.pop()-->
-        <!--main_input.innerHTML = item[1]   ;-->
-        <!--console.log(listedItems)-->
-    <!--}-->
-    <!--xhr.send()-->
+
+</script>
+
+<script>
+
+    postData('{{ data.API_URL }}/quiz_check_answer', {question: 1, answer: 1}).then((init_data) => {
+        let question = init_data.next_question;
+        document.querySelector('#question-space').innerHTML = question;
+        console.log(init_data)
+    });
+
+</script>
+<script>
 
 
+    window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+    let finalTranscript = '';
+    let recognition = new window.SpeechRecognition();
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 10;
+    recognition.continuous = true;
+    recognition.lang = '{{data.language}}';
+    recognition.onresult = (event) => {
+      let interimTranscript = '';
+      for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
+        let transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+      document.querySelector('#main-input').innerHTML = '<h1>' + finalTranscript + '<i style="color:#ddd;">' + interimTranscript + '</></h1>';
+      if (finalTranscript) {
+            postData('{{ data.API_URL }}/quiz_check_answer', { question: document.querySelector('#bot-output-1').innerHTML, answer: finalTranscript}).then((data) => {
+            console.log(data);
+            if (data.answer_correct == 1) {
+                document.querySelector('#question-space').innerHTML = data.next_question;
+            }
+            else {
+                document.querySelector('#main-input').innerHTML = '<h1>WRONG!</h1>';
+            }
 
-<!--</script>-->
-{% include 'js/ear_quiz.html' %}
+            finalTranscript = "";
+      });
+    }
+
+    }
+    recognition.start();
+    recognition.onend = (event) => {
+        recognition.start();
+    };
+</script>
 
 {% endblock content %}
